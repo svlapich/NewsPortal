@@ -2,24 +2,106 @@
 <html lang="ru">
 
 <head>
-
-	<meta charset="utf-8">
-
-	<title>Title</title>
-	<meta name="description" content="">
-
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-	<style>body { opacity: 0; overflow-x: hidden; } html { background-color: #fff; }</style>
-
+  <meta charset="utf-8">
+  <title>News Portal</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
-
-	<p>Далеко-далеко за словесными горами в стране, гласных и согласных живут рыбные тексты. Скатился что даль пунктуация снова агенство повстречался строчка толку города над своего дороге ведущими коварный дорогу то, ipsum своих грамматики.</p>
-	
-	<link rel="stylesheet" href="css/main.min.css">
-	<script src="js/scripts.min.js"></script>
-
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+            mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <div class="mdl-layout-spacer"></div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
+          <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
+            <i class="material-icons">search</i>
+          </label>
+          <div class="mdl-textfield__expandable-holder">
+            <input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp">
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">New Portal</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+        <a class="mdl-navigation__link" href="">Link</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content">
+      <div class="page-content">
+        <!-- First card -->
+        <div class="mdl-grid mdl-shadow--2dp">
+          <div class="mdl-cell mdl-cell--3-col-desktop mdl-cell--hide-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+            <img class="card_image" src="https://cdn.pixabay.com/photo/2017/04/09/09/56/avenue-2215317__340.jpg" alt="">
+          </div>
+          <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+            <div class="mdl-card__supporting-text">
+              <h4>Features</h4>
+              Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Nostrud in laboris labore nisi amet do dolor eu fugiat consectetur elit cillum esse.
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                Read more ...</a>
+            </div>
+            <div class="mdl-card__menu">
+              <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                <i class="material-icons">share</i></button>
+            </div>
+          </div>
+        </div>
+        <div class="mdl-grid mdl-shadow--2dp">
+          <div class="mdl-cell mdl-cell--3-col-desktop mdl-cell--hide-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+            <img class="card_image" src="https://cdn.pixabay.com/photo/2017/04/09/09/56/avenue-2215317__340.jpg" alt="">
+          </div>
+          <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone mdl-shadow--2dp">
+            <div class="mdl-card__supporting-text">
+              <h4>Features</h4>
+              Dolore ex deserunt aute fugiat aute nulla ea sunt aliqua nisi cupidatat eu. Nostrud in laboris labore nisi amet do dolor eu fugiat consectetur elit cillum esse.
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                Read more ...</a>
+            </div>
+            <div class="mdl-card__menu">
+              <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                <i class="material-icons">share</i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mdl-layout-spacer"></div>
+      <!-- MDL Mini Footer Container-->
+      <footer class="mdl-mini-footer">
+        <!-- MDL Footer left Section-->
+        <div class="mdl-mini-footer__left-section">
+          <div class="mdl-logo">News Portal</div>
+          <!-- MDL Footer link-list -->
+          <ul class="mdl-mini-footer__link-list">
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+          </ul>
+        </div>
+      </footer>
+    </main>
+  </div>
+  <link rel="stylesheet" href="css/main.min.css">
+  <script src="js/scripts.min.js"></script>
 </body>
+
 </html>
