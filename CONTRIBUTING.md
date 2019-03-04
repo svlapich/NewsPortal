@@ -1,4 +1,4 @@
-# Contributing to pandas
+# Contributing to NewPortal
 
 Whether you are a novice or experienced software developer, all contributions and suggestions are welcome!
 
