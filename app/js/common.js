@@ -80,7 +80,7 @@ function drawPosts(posts) {
     }
 
   }
-  $('.page-content').append(htmlFields);
+  $('#content').append(htmlFields);
 
 }
 
