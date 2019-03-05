@@ -25,7 +25,7 @@
 
     function drawPosts(posts){
             let htmlFields = '';
-            for(let i = 1; i < posts.response; i++){
+            for(let i = 1; i < posts.lengths; i++){
                 let post = posts[i];
                 // htmlFields += '<div class="mdl-grid mdl-cell mdl-cell mdl-cell--12-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--4dp">\n' +
                 //     '          <div class="mdl-card__media mdl-cell  mdl-cell--3-col-desktop mdl-cell--hide-tablet mdl-cell--4-col-phone">\n' +
@@ -49,13 +49,13 @@
                 //     '        </div>';
                 htmlFields += '<div>' + posts.text + '</div>';
             }
-            $('.page_content').html(htmlFields);
+            $('.page_content').append(htmlFields);
 
         }
 
     function onStart() {
            sendRequest("wall.get", {owner_id:-179220995, fields: 'photo_500'}, function (data) {
                console.log(data);
-               drawPosts(data.response);
+               drawPosts(data.response.items);
            });
         }
