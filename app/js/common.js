@@ -1,16 +1,37 @@
-// https://oauth.vk.com/blank.html#access_token=a8dc9c473d0294fdaa38f4095c4964cdbe1ac7b8246982444133117e0301ee9e6bdad2ef325672be3215f&expires_in=86400&user_id=163676173
-// a8dc9c473d0294fdaa38f4095c4964cdbe1ac7b8246982444133117e0301ee9e6bdad2ef325672be3215f
-//https://api.vk.com/method/users.get?user_id=6886606&v=5.52
-// + post.attachments[0]['photo'].photo_604+
-// public179220995
+var regFindHastTag = /\B\#\w\w+\b/g;
+var regFindEmail = /@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])/g;
+var findFirstSent = /[^\.\!\?]+[\.\!\?]/;
+
+
 $(document).ready(function() {
-  onStart(getResponse);
+  onStart(getPosts);
 });
 
 
 //function for get response from vk
-function getResponse(data){
-  drawPosts(data.response.items);
+function getPosts(data) {
+  var hashTag, postCode, postTitle, postText, attachment, photoSize;
+  var posts = data.response.items;
+  for (var i in posts) {
+    var post = posts[i];
+    hastTag = post.text.match(regFindHastTag);
+    postCode = post.text.match(regFindEmail);
+    postText = post.text.replace(hastTag, '').replace(postCode, '');
+    postTitle = postText.match(findFirstSent);
+    if (post.attachments[0]['photo']) {
+      attachment = 'photo';
+      photoSize = 'photo_604';
+    } else if (post.attachments[0]['video']) {
+      attachment = 'video';
+      photoSize = 'photo_640';
+    } else if (post.attachments[0]['link']) {
+      attachment = 'link';
+      photoSize = 'photo_640' //TODO doesnt work
+    }
+    console.log(post);
+    drawPosts(post.attachments[0][attachment][photoSize], 
+      postTitle, postText, hashTag, postCode);
+  }
 }
 
 function getUrl(method, params) {
@@ -20,65 +41,31 @@ function getUrl(method, params) {
   return 'https://api.vk.com/method/' + method + '?' + $.param(params) + '&v=5.52';
 }
 
-function drawPosts(posts) {
+function drawPosts(postImage, postTitle, postText, hashTag, postCode) {
   var htmlFields = '';
-  var hashTag, postCode, postTitle, postText;
-  var regFindHastTag = /\B\#\w\w+\b/g;
-  var regFindEmail = /@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])/g;
-  var findFirstSent = /[^\.\!\?]+[\.\!\?]/;
-
-  for (var i in posts) {
-    var post = posts[i];
-    var text = post.text;
-    var attachment;
-    var photoSize;
-    var isPhotoOrVideo = false;
-
-    hastTag = text.match(regFindHastTag);
-    if (hastTag == null) hastTag = "general";
-    postCode = text.match(regFindEmail);
-
-    postText = text.replace(hastTag, '').replace(postCode, '').slice(0, 400);
-
-    postTitle = postText.match(findFirstSent);
-
-    if (post.attachments[0]['photo']) {
-      attachment = 'photo';
-      photoSize = 'photo_604';
-      isPhotoOrVideo = true;
-    } else if (post.attachments[0]['video']) {
-      attachment = 'video';
-      photoSize = 'photo_640';
-      isPhotoOrVideo = true;
-    }
-
-    if (isPhotoOrVideo) {
-      htmlFields +=
-        '<div class="mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--4dp">\n' +
-        ' <div class="mdl-cell  mdl-cell--4-col-desktop mdl-cell--hide-tablet mdl-cell--4-col-phone">\n' +
-        '   <img class="card_image" src="' + post.attachments[0][attachment][photoSize] + '" alt="">\n' +
-        ' </div>\n' +
-        '   <div class="mdl-cell mdl-cell--8-col">\n' +
-        '   <h2 class="mdl-card__title-text mdl-card--expand">' + postTitle + '</h2>\n' +
-        '         <div class="mdl-card__menu mdl-cell--hide-phone">\n' +
-        '             <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n' +
-        '               <i class="material-icons">share</i></button>\n' +
-        '           </div>\n' +
-        '           <div class="mdl-card__supporting-text no-left-padding">\n' +
-        '             <p>' + postText + '...' + '</p>\n' +
-        '           </div>\n' +
-        '           <div class="mdl-card__subtitle-text">\n' +
-        '             <span>Category: <a href="#">' + hastTag + '</a></span>\n' +
-        '           </div>\n' +
-        '           <div style="text-align: right;" class="mdl-card__actions mdl-card--border">\n' +
-        '       <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read more</a>\n' +
-        '           </div>\n' +
-        ' </div>\n' +
-        '</div>';
-    }
-  }
+  htmlFields +=
+    '<div class="mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--4dp">\n' +
+    ' <div class="mdl-cell  mdl-cell--4-col-desktop mdl-cell--hide-tablet mdl-cell--4-col-phone">\n' +
+    '   <img class="card_image" src="' + postImage + '" alt="">\n' +
+    ' </div>\n' +
+    '   <div class="mdl-cell mdl-cell--8-col">\n' +
+    '   <h2 class="mdl-card__title-text mdl-card--expand">' + postTitle + '</h2>\n' +
+    '         <div class="mdl-card__menu mdl-cell--hide-phone">\n' +
+    '             <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">\n' +
+    '               <i class="material-icons">share</i></button>\n' +
+    '           </div>\n' +
+    '           <div class="mdl-card__supporting-text no-left-padding">\n' +
+    '             <p>' + postText + '...' + '</p>\n' +
+    '           </div>\n' +
+    '           <div class="mdl-card__subtitle-text">\n' +
+    '             <span>Category: <a href="#">' + hastTag + '</a></span>\n' +
+    '           </div>\n' +
+    '           <div style="text-align: right;" class="mdl-card__actions mdl-card--border">\n' +
+    '       <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Read more</a>\n' +
+    '           </div>\n' +
+    ' </div>\n' +
+    '</div>';
   $('#content').append(htmlFields);
-
 }
 
 var isLoaded = false;
@@ -92,10 +79,9 @@ function onStart(callback) {
     async: false,
     success: function(data) {
       callback(data);
-      // drawPosts(data.response.items);
     },
     error: function(error) {
-     console.log(error); 
+      console.log(error);
     }
   });
   isLoaded = true;
