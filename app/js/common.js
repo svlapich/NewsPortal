@@ -4,8 +4,14 @@
 // + post.attachments[0]['photo'].photo_604+
 // public179220995
 $(document).ready(function() {
-  onStart();
+  onStart(getResponse);
 });
+
+
+//function for get response from vk
+function getResponse(data){
+  drawPosts(data.response.items);
+}
 
 function getUrl(method, params) {
   if (!method) throw Error('There is incorrect method');
@@ -35,7 +41,6 @@ function drawPosts(posts) {
     postText = text.replace(hastTag, '').replace(postCode, '').slice(0, 400);
 
     postTitle = postText.match(findFirstSent);
-    console.log(postTitle);
 
     if (post.attachments[0]['photo']) {
       attachment = 'photo';
@@ -78,7 +83,7 @@ function drawPosts(posts) {
 
 var isLoaded = false;
 
-function onStart() {
+function onStart(callback) {
   if (isLoaded) return;
   $.ajax({
     url: getUrl("wall.get", { owner_id: -179220995, fields: 'photo_500' }),
@@ -86,8 +91,11 @@ function onStart() {
     dataType: "JSONP",
     async: false,
     success: function(data) {
-      console.log(1);
-      drawPosts(data.response.items);
+      callback(data);
+      // drawPosts(data.response.items);
+    },
+    error: function(error) {
+     console.log(error); 
     }
   });
   isLoaded = true;
