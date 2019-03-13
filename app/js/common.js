@@ -25,10 +25,42 @@ function getData(data) {
       postImage = post.attachments[0]['link']['photo']['photo_604'];
     }
     drawPosts(postImage, postTitle, postText, hashTag, postCode);
-  };
+  }
   content = document.getElementById("content");
   science = document.querySelectorAll(".science");
-  console.log(science)
+  business = document.querySelectorAll(".business");
+  health = document.querySelectorAll(".health");
+  document.getElementById("science").addEventListener('click', function () {
+    var html = '';
+    content.innerHTML = '';
+    for (var j in science) {
+      var sciencePost = science[j];
+      console.log(sciencePost);
+      html = sciencePost;
+      content.appendChild(html);
+    }
+  });
+  document.getElementById("business").addEventListener('click', function () {
+    var html = '';
+    content.innerHTML = '';
+    for (var j in business) {
+      var sciencePost = business[j];
+      console.log(sciencePost);
+      html = sciencePost;
+      content.appendChild(html);
+    }
+  });
+  document.getElementById("health").addEventListener('click', function () {
+    var html = '';
+    content.innerHTML = '';
+    for (var j in health) {
+      var sciencePost = health[j];
+      console.log(sciencePost);
+      html = sciencePost;
+      content.appendChild(html);
+    }
+  });
+
 }
 
 
