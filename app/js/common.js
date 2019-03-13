@@ -69,7 +69,7 @@ function drawPosts(postImage, postTitle, postText, hashTag, postCode) {
 }
 
 function goBackToMain() {
-  onStart(getData);
+  window.open("index.html", "_self");
 }
 
 function getArticle(postImage, postTitle, postText, hashTag) {
