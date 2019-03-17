@@ -1,9 +1,10 @@
-# department-app
-A project for departments and employees management
+# News Portal
+The project is a news portal which loads data from public page using VK API (https://vk.com/public179220995).
 
 ## Built With
 * [NodeJS](https://nodejs.org/en/) - latest version
 * [Gulp](https://gulpjs.com/) - Gulp 4
+* [VK API](https://vk.com/dev/manuals) - latest version
 
 ## Get project
 * Clone this project, ``` git clone https://github.com/MikalaiKazak/NewsPortal.git ```
@@ -12,5 +13,5 @@ A project for departments and employees management
 1. Install nodejs - sudo apt install nodejs
 2. Istall npm - sudo apt install npm
 3. Install gulp - sudo npm install --global gulp
-5. In the project folder run gulp -- gulp
-4. Enjoy cool project
+4. In the project folder run gulp -- gulp
+5. Enjoy
