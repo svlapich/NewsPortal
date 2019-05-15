@@ -11,10 +11,8 @@
 </head>
 
 <body>
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
-            mdl-layout--fixed-header">
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header mdl-color--red-600"></header>
-    <div class="mdl-layout__drawer"></div>
     <main class="mdl-layout__content">
       <div id="full-post" class="page-content">
       </div>
@@ -22,12 +20,31 @@
       <footer class="mdl-mini-footer mdl-color--grey-900"></footer>
     </main>
   </div>
+
   <link rel="stylesheet" href="css/main.min.css">
   <script src="js/scripts.min.js"></script>
+  <script type="text/javascript">
+    function init(postImage, postTitle, postText) {
+      let article = document.createElement("div");
+      article.className = "article";
+      article.innerHTML =
+        ' <div class="article_header">\n' +
+        '   <h1>' + postTitle + '</h1>\n' +
+        ' </div>\n' +
+        ' <div class="article__content">\n' +
+        '   <div class="article_image__wrapper">\n' +
+        '     <img class="article_image" src="' + postImage + '" alt="">\n' +
+        '   </div>\n' +
+        '   <div class="article_text">' + postText + '</div>\n' +
+        '   <div class="article_like"></div>\n' +
+        ' </div>\n'
+      let post = document.getElementById("full-post");
+      post.appendChild(article);
+    }
+  </script>
   <script>
   $(document).ready(function(e) {
     $(".mdl-layout__header").load("header.html");
-    $(".mdl-layout__drawer").load("drawer.html");
     $(".mdl-mini-footer").load("footer.html");
   });
   </script>
