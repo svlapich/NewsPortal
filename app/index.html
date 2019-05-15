@@ -23,20 +23,66 @@
     </main>
   </div>
 
-  <div class="modal">
-    <form>
-      
+  <dialog id="signUpModal" class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Sign up</h4>
+    <form class="mdl-dialog__content" id="signUpForm">
+      <div class="mdl-textfield mdl-js-textfield">
+        <label class="mdl-textfield__label" for="userNameInput">Login</label>
+        <input class="mdl-textfield__input" id="userNameInput" type="text" name="userName">
+      </div>
+      <div class="mdl-textfield mdl-js-textfield">
+        <label class="mdl-textfield__label" for="passwordInput">Password</label>
+        <input class="mdl-textfield__input" id="passwordInput" type="text" name="password">
+      </div>
+      <div class="mdl-textfield mdl-js-textfield">
+        <label class="mdl-textfield__label" for="cardNumberInput">Card number</label>
+        <input class="mdl-textfield__input" id="cardNumberInput" type="text" name="cardNumber">
+      </div>
+      <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+        <button style="text-align: center;" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit">Sign up</button>
+        <button style="text-align: center;" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent close"> 
+          <i class="material-icons">close</i>Close
+        </button>
+        <div>
+          <p>If you have account</p>
+          <button type="button" style="text-align: center;" class="close mdl-button show-login" onclick="getLoginPage()">sign in</button>
+        </div>
+      </div>
     </form>
-  </div>
+  </dialog>
+
+   <dialog id="signInModal" class="mdl-dialog">
+    <h4 class="mdl-dialog__title">Sign in</h4>
+    <form class="mdl-dialog__content" id="loginForm">
+      <div class="mdl-textfield mdl-js-textfield">
+        <label class="mdl-textfield__label" for="userNameInput">Login</label>
+        <input class="mdl-textfield__input" id="userNameInput" type="text" name="userName">
+      </div>
+      <div class="mdl-textfield mdl-js-textfield">
+        <label class="mdl-textfield__label" for="passwordInput">Password</label>
+        <input class="mdl-textfield__input" id="passwordInput" type="text" name="password">
+      </div>
+      <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+        <button style="text-align: center;" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit">Sign in</button>
+        <button style="text-align: center;" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent close"> 
+          <i class="material-icons">close</i>Close
+        </button>
+        <div>
+          <p>If you don't have account</p>
+          <button type="button" style="text-align: center;" class="close mdl-button show-signUp" onclick="getSignUpPage()">sign up</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
 
   <link rel="stylesheet" href="css/main.min.css">
   <script src="js/scripts.min.js"></script>
-  <script>
-  $(document).ready(function(e) {
-    $(".mdl-layout__header").load("header.html");
-    $(".mdl-layout__drawer").load("drawer.html");
-    $(".mdl-mini-footer").load("footer.html");
-  });
+  <script type="text/javascript">
+    $(document).ready(function(e) {
+      $(".mdl-layout__header").load("header.html");
+      $(".mdl-layout__drawer").load("drawer.html");
+      $(".mdl-mini-footer").load("footer.html");
+    });
   </script>
 </body>
 
