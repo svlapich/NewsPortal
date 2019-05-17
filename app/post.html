@@ -4,30 +4,30 @@
 <head>
   <meta charset="utf-8">
   <title>News Portal</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <meta content="" name="description">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+  <link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header mdl-color--red-600"></header>
-    <main class="mdl-layout__content">
-      <div id="full-post" class="page-content">
-      </div>
-      <div class="mdl-layout-spacer"></div>
-      <footer class="mdl-mini-footer mdl-color--grey-900"></footer>
-    </main>
-  </div>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header mdl-color--red-600"></header>
+  <main class="mdl-layout__content">
+    <div class="page-content" id="full-post">
+    </div>
+    <div class="mdl-layout-spacer"></div>
+    <footer class="mdl-mini-footer mdl-color--grey-900"></footer>
+  </main>
+</div>
 
-  <link rel="stylesheet" href="css/main.min.css">
-  <script src="js/scripts.min.js"></script>
-  <script type="text/javascript">
-    function init(postImage, postTitle, postText) {
-      let article = document.createElement("div");
-      article.className = "article";
-      article.innerHTML =
+<link href="css/main.min.css" rel="stylesheet">
+<script src="js/scripts.min.js"></script>
+<script type="text/javascript">
+  function init(postImage, postTitle, postText) {
+    let article = document.createElement("div");
+    article.className = "article";
+    article.innerHTML =
         ' <div class="article_header">\n' +
         '   <h1>' + postTitle + '</h1>\n' +
         ' </div>\n' +
@@ -37,17 +37,17 @@
         '   </div>\n' +
         '   <div class="article_text">' + postText + '</div>\n' +
         '   <div class="article_like"></div>\n' +
-        ' </div>\n'
-      let post = document.getElementById("full-post");
-      post.appendChild(article);
-    }
-  </script>
-  <script>
-  $(document).ready(function(e) {
+        ' </div>\n';
+    let post = document.getElementById("full-post");
+    post.appendChild(article);
+  }
+</script>
+<script>
+  $(document).ready(function (e) {
     $(".mdl-layout__header").load("header.html");
     $(".mdl-mini-footer").load("footer.html");
   });
-  </script>
+</script>
 </body>
 
 </html>
