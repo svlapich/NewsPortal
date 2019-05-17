@@ -176,10 +176,11 @@ function drawPosts(postImage, postTitle, postText, postCategory) {
   let content = document.getElementById("content");
   content.appendChild(card);
 
-  let readMore = document.getElementById(postCategory.replace(/\s/g,"_") + '_read-more');
-  readMore.addEventListener('click', function() {
-    if(getArticle(postImage, postTitle, postText)) {
-       getLoginPage(postImage, postTitle, postText);
+  let readMore = document.getElementById(
+      postCategory.replace(/\s/g, "_") + '_read-more');
+  readMore.addEventListener('click', function () {
+    if (getArticle(postImage, postTitle, postText)) {
+      getLoginPage(postImage, postTitle, postText);
     }
   }, false);
 
@@ -209,18 +210,18 @@ function getPayPage() {
 }
 
 function getSignUpPage() {
-  closeModal("signInModal");  
+  closeModal("signInModal");
   let dialog = document.querySelector('#signUpModal');
   dialog.showModal();
 }
-  
+
 function getLoginPage(postImage, postTitle, postText) {
   closeModal("signUpModal");
   let dialog = document.querySelector('#signInModal');
-  dialog.showModal()
+  dialog.showModal();
 
   let payModal = document.querySelector('#payModal');
-  let signUpModal = document.querySelector('#signUpModal'); 
+  let signUpModal = document.querySelector('#signUpModal');
   document.querySelector('#loginForm').addEventListener('submit', (e) => {
     const formData = new FormData(e.target);
     let user = {
@@ -239,18 +240,19 @@ function getLoginPage(postImage, postTitle, postText) {
   });
 }
 
-function closeModal (dialogName) {
-   let dialog = document.querySelector('#' + dialogName);
-   dialog.close();
+function closeModal(dialogName) {
+  let dialog = document.querySelector('#' + dialogName);
+  dialog.close();
 }
 
 let isLoadedSignUp = false;
+
 function signup(requestUser) {
   if (isLoadedSignUp) {
     return;
   }
   $.ajax({
-    url: "http://localhost:8089/api/v1/users",
+    url: "http://localhost:8080/api/v1/users",
     method: "POST",
     data: JSON.stringify(requestUser),
     contentType: "application/json",
@@ -272,14 +274,16 @@ function signup(requestUser) {
 function checkAccess(user) {
   let result = false;
   $.ajax({
-    url: "http://localhost:8089/api/v1/news",
+    url: "http://localhost:8080/api/v1/news",
     method: "POST",
     data: JSON.stringify(user),
     contentType: "application/json",
     async: false,
     success: function (data) {
       saveUser = user;
-      if (data.isPremium === true) {result = true;}
+      if (data.isPremium === true) {
+        result = true;
+      }
     },
     error: function (error) {
       throw new Error(error);
@@ -289,17 +293,17 @@ function checkAccess(user) {
 }
 
 function getArticle(postImage, postTitle, postText) {
-  if(saveUser != null && checkAccess(saveUser)) {
+  if (saveUser != null && checkAccess(saveUser)) {
     let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
     OpenWindow.onload = function () {
       OpenWindow.init(postImage, postTitle, postText);
-    }
+    };
     return false;
-  } else if(saveUserRequest != null && checkAccess(saveUserRequest.user)) {
+  } else if (saveUserRequest != null && checkAccess(saveUserRequest.user)) {
     let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
     OpenWindow.onload = function () {
       OpenWindow.init(postImage, postTitle, postText);
-    }
+    };
     return false;
   } else {
     return true;
