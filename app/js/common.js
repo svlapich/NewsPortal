@@ -1,16 +1,19 @@
-const findFirstSent = /[^\.\!\?]+[\.\!\?]/;
-const regFindPublic = /\B\@\w\w+\b/g;
+'use strict'
+
+var findFirstSent = /[^\.\!\?]+[\.\!\?]/;
+var regFindPublic = /\B\@\w\w+\b/g;
 var isLoaded = false;
 var isLoadedSignUp = false;
 var saveUserRequest;
 var saveUser;
+var saveData;
 
 function getUrl(method, params) {
   if (!method) {
     throw Error('There is incorrect method');
   }
   params = params || {};
-  params['access_token'] = "a8604e5da8604e5da8604e5d3ca809ad4faa860a8604e5df4ce2dfea4a7526bfd377d24";
+  params['access_token'] = "7a5de8997a5de8997a5de899917a34fc5777a5d7a5de8992620176c45c38ea6bdcec820";
   return 'https://api.vk.com/method/' + method + '?' + $.param(params)
       + '&v=5.52';
 }
@@ -27,7 +30,9 @@ function onStart(callback) {
     dataType: "JSONP",
     async: false,
     success: function (data) {
-      callback(data);
+      if(data != null) {
+        callback(data);
+      }
     },
     error: function (error) {
       throw new Error(error);
