@@ -1,8 +1,10 @@
-const token = 'a8604e5da8604e5da8604e5d3ca809ad4faa860a8604e5df4ce2dfea4a7526bfd377d24';
-const findFirstSent = /[^\.\!\?]+[\.\!\?]/;
+'use strict'
+
+let token = 'a8604e5da8604e5da8604e5d3ca809ad4faa860a8604e5df4ce2dfea4a7526bfd377d24';
+let findFirstSent = /[^\.\!\?]+[\.\!\?]/;
 let regFindPublic = /\B\@\w\w+\b/g;
 let isLoaded = false;
-
+let isLoadedSignUp = false;
 let saveUserRequest;
 let saveUser;
 
@@ -15,6 +17,8 @@ function getUrl(method, params) {
   return 'https://api.vk.com/method/' + method + '?' + $.param(params)
       + '&v=5.52';
 }
+
+onStart(getData);
 
 function onStart(callback) {
   if (isLoaded) {
@@ -35,7 +39,79 @@ function onStart(callback) {
   isLoaded = true;
 }
 
-onStart(getData);
+function closeModal(dialogName) {
+  let dialog = document.querySelector('#' + dialogName);
+  dialog.close();
+}
+
+function signup(requestUser) {
+  console.log(requestUser);
+  if (isLoadedSignUp) {
+    return;
+  }
+  $.ajax({  
+    url: "http://localhost:8080/api/v1/users",
+    method: "POST",
+    data: JSON.stringify(requestUser),
+    contentType: "application/json",
+    async: false,
+    success: function (data) {
+      if (data != null) {
+        console.log(data);
+        if(saveUserRequest != null) {
+
+        } else {
+          saveUserRequest = requestUser;
+        }
+      }
+    },
+    error: function (error) {
+      throw new Error(error);
+    }
+  });
+  isLoadedSignUp = true;
+}
+
+function checkAccess(user) {
+  let result = false;
+  $.ajax({
+    url: "http://localhost:8080/api/v1/news",
+    method: "POST",
+    data: JSON.stringify(user),
+    contentType: "application/json",
+    async: false,
+    success: function (data) {
+      if (data.isPremium === true) {
+        if(saveUser != null){
+          
+        } else {
+          saveUser = user;
+        }
+        result = true;
+      }
+    },
+    error: function (error) {
+      throw new Error(error);
+    }
+  });
+  return result;
+}
+
+$("#fixed-header-drawer-exp").on("keyup", function () {
+  let value = $(this).val();
+  count = 0;
+  $(".mdl-card").each(function (index) {
+    $row = $(this);
+    let title = $row.find("#title").text();
+
+    if ($(this).text().search(new RegExp(value, "i")) < 0) {
+      $row.hide();
+    } else {
+      $row.show();
+      count++;
+    }
+  });
+});
 
 function getAllhastTagsFromPost(text) {
   let regFindHashTag = /\B\#\w\w+\b/g;
@@ -184,18 +260,18 @@ function drawPosts(postImage, postTitle, postText, postCategory, isPublic) {
   let readMore = document.getElementById(
       postCategory.replace(/\s/g, "_") + '_read-more');
   readMore.addEventListener('click', function () {
-    if (getArticle(postImage, postTitle, postText, isPublic)) {
-      getLoginPage(postImage, postTitle, postText, isPublic);
+    if (!isGetAccessToArticle(postImage, postTitle, postText, isPublic)) {
+      getLoginPage(postImage, postTitle, postText);
     }
   }, false);
 
 }
 
-function getPayPage(user) {
-  closeModal("signUpModal");
+function getPayPage(user, postImage, postTitle, postText) {
   let dialog = document.querySelector('#payModal');
   dialog.showModal();
   document.querySelector('#payForm').addEventListener('submit', (e) => {
+    e.preventDefault();
     const formData = new FormData(e.target);
     let pay = {
       cardNumber: formData.get("cardNumber")
@@ -205,141 +281,79 @@ function getPayPage(user) {
       pay: pay
     };
     dialog.close();
-    e.preventDefault();
     signup(userRequest);
+    if(checkAccess(user)){
+      if(isOpenNewArticle(postImage, postTitle, postText)){
+         dialog.close();
+      } else {
+        dialog.close();
+        throw new Error("Can't open new article");
+      }
+    } 
   });
 }
 
-function getSignUpPage() {
-  closeModal("signInModal");
+function getSignUpPage(postImage, postTitle, postText) {
   let dialog = document.querySelector('#signUpModal');
   dialog.showModal();
   document.querySelector('#signUpForm').addEventListener('submit', (e) => {
+    e.preventDefault();
     const formData = new FormData(e.target);
     let user = {
-      userName: document.getElementById("userNameInput_signInModal").value,
-      password: document.getElementById("passwordInput_signInModal").value
+      userName: document.getElementById("userNameInput_signUpModal").value,
+      password: document.getElementById("passwordInput_signUpModal").value
     };
     dialog.close();
-    e.preventDefault();
-    getPayPage(user);
+    console.log(user);
+    getPayPage(user, postImage, postTitle, postText);
+  });
+  document.querySelector('.show-login').addEventListener('click', function () {
+    dialog.close();
+    getLoginPage(postImage, postTitle, postText);
   });
 }
 
-function getLoginPage(postImage, postTitle, postText, isPublic) {
-  closeModal("signUpModal");
+function getLoginPage(postImage, postTitle, postText) {
   let dialog = document.querySelector('#signInModal');
   dialog.showModal();
-
-  let payModal = document.querySelector('#payModal');
-  let signUpModal = document.querySelector('#signUpModal');
   document.querySelector('#loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
     const formData = new FormData(e.target);
     let user = {
       userName: document.getElementById("userNameInput_signInModal").value,
       password: document.getElementById("passwordInput_signInModal").value
     };
     if (checkAccess(user)) {
-      getArticle(postImage, postTitle, postText, isPublic);
-      dialog.close();
-      e.preventDefault();
+      if(isOpenNewArticle(postImage, postTitle, postText)){
+         dialog.close();
+      } else {
+        dialog.close();
+        throw new Error("Can't open new article");
+      }
     } else {
       dialog.close();
-      e.preventDefault();
-      getSignUpPage();
+      getSignUpPage(postImage, postTitle, postText);
+      throw new Error("You don't have access. Pls pay");
     }
+  });
+  document.querySelector('.showSignUp').addEventListener('click', function () {
+    dialog.close(); 
+    getSignUpPage(postImage, postTitle, postText);
   });
 }
 
-function closeModal(dialogName) {
-  let dialog = document.querySelector('#' + dialogName);
-  dialog.close();
-}
-
-let isLoadedSignUp = false;
-
-function signup(requestUser) {
-  if (isLoadedSignUp) {
-    return;
-  }
-  $.ajax({
-    url: "http://localhost:8080/api/v1/users",
-    method: "POST",
-    data: JSON.stringify(requestUser),
-    contentType: "application/json",
-    async: false,
-    success: function (data) {
-      if (data != null) {
-        saveUserRequest = requestUser
-      } else {
-        throw new Error("error");
-      }
-    },
-    error: function (error) {
-      throw new Error(error);
-    }
-  });
-  isLoadedSignUp = true;
-}
-
-function checkAccess(user) {
-  let result = false;
-  $.ajax({
-    url: "http://localhost:8080/api/v1/news",
-    method: "POST",
-    data: JSON.stringify(user),
-    contentType: "application/json",
-    async: false,
-    success: function (data) {
-      saveUser = user;
-      if (data.isPremium === true) {
-        result = true;
-      }
-    },
-    error: function (error) {
-      throw new Error(error);
-    }
-  });
-  return result;
-}
-
-function getArticle(postImage, postTitle, postText, isPublic) {
-  if(isPublic) {
-    let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
-    OpenWindow.onload = function () {
-      OpenWindow.init(postImage, postTitle, postText);
-    };
+function isOpenNewArticle(postImage, postTitle, postText) {
+  let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
+  OpenWindow.onload = function () {
+    OpenWindow.init(postImage, postTitle, postText);
     return false;
-  } else if (saveUser != null && checkAccess(saveUser)) {
-    let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
-    OpenWindow.onload = function () {
-      OpenWindow.init(postImage, postTitle, postText);
-    };
-    return false;
-  } else if (saveUserRequest != null && checkAccess(saveUserRequest.user)) {
-    let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
-    OpenWindow.onload = function () {
-      OpenWindow.init(postImage, postTitle, postText);
-    };
-    return false;
-  } else {
-    return true;
-  }
+  };
   return true;
 }
 
-$("#fixed-header-drawer-exp").on("keyup", function () {
-  let value = $(this).val();
-  count = 0;
-  $(".mdl-card").each(function (index) {
-    $row = $(this);
-    let title = $row.find("#title").text();
-
-    if ($(this).text().search(new RegExp(value, "i")) < 0) {
-      $row.hide();
-    } else {
-      $row.show();
-      count++;
-    }
-  });
-});
+function isGetAccessToArticle(postImage, postTitle, postText, isPublic) {
+  if(isPublic != null && isPublic) { return isOpenNewArticle(postImage, postTitle, postText); } 
+  if (saveUser != null && checkAccess(saveUser)) { return isOpenNewArticle(postImage, postTitle, postText); } 
+  else if (saveUserRequest != null && checkAccess(saveUserRequest.user)) { return isOpenNewArticle(postImage, postTitle, postText); } 
+  else { return false; }
+}

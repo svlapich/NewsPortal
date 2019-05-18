@@ -37,20 +37,19 @@
              type="text">
     </div>
     <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
-      <button class="show-pay mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
               style="text-align: center;" type="submit">
         Pay
       </button>
       <button ;
-              class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent close"
+              class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent"
               onclick="closeModal('signUpModal')" style="text-align: center;"
               type="button">
         <i class="material-icons">close</i>Close
       </button>
       <div>
         <p>If you have account</p>
-        <button class="mdl-button"
-                onclick="getLoginPage();"
+        <button class="show-login mdl-button"
                 style="text-align: center;"
                 type="button">sign in
         </button>
@@ -84,8 +83,7 @@
       </button>
       <div>
         <p>If you don't have account</p>
-        <button class="mdl-button"
-                onclick="getSignUpPage();"
+        <button class="showSignUp mdl-button"
                 style="text-align: center;"
                 type="button">sign up
         </button>
