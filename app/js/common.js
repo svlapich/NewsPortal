@@ -1,19 +1,16 @@
-'use strict'
-
-let token = 'a8604e5da8604e5da8604e5d3ca809ad4faa860a8604e5df4ce2dfea4a7526bfd377d24';
-let findFirstSent = /[^\.\!\?]+[\.\!\?]/;
-let regFindPublic = /\B\@\w\w+\b/g;
-let isLoaded = false;
-let isLoadedSignUp = false;
-let saveUserRequest;
-let saveUser;
+const findFirstSent = /[^\.\!\?]+[\.\!\?]/;
+const regFindPublic = /\B\@\w\w+\b/g;
+var isLoaded = false;
+var isLoadedSignUp = false;
+var saveUserRequest;
+var saveUser;
 
 function getUrl(method, params) {
   if (!method) {
     throw Error('There is incorrect method');
   }
   params = params || {};
-  params['access_token'] = token;
+  params['access_token'] = "a8604e5da8604e5da8604e5d3ca809ad4faa860a8604e5df4ce2dfea4a7526bfd377d24";
   return 'https://api.vk.com/method/' + method + '?' + $.param(params)
       + '&v=5.52';
 }
@@ -40,7 +37,7 @@ function onStart(callback) {
 }
 
 function closeModal(dialogName) {
-  let dialog = document.querySelector('#' + dialogName);
+  var dialog = document.querySelector('#' + dialogName);
   dialog.close();
 }
 
@@ -73,7 +70,7 @@ function signup(requestUser) {
 }
 
 function checkAccess(user) {
-  let result = false;
+  var result = false;
   $.ajax({
     url: "http://localhost:8080/api/v1/news",
     method: "POST",
@@ -97,27 +94,11 @@ function checkAccess(user) {
   return result;
 }
 
-$("#fixed-header-drawer-exp").on("keyup", function () {
-  let value = $(this).val();
-  count = 0;
-  $(".mdl-card").each(function (index) {
-    $row = $(this);
-    let title = $row.find("#title").text();
-
-    if ($(this).text().search(new RegExp(value, "i")) < 0) {
-      $row.hide();
-    } else {
-      $row.show();
-      count++;
-    }
-  });
-});
-
 function getAllhastTagsFromPost(text) {
-  let regFindHashTag = /\B\#\w\w+\b/g;
-  let hashTags = text.match(regFindHashTag);
+  var regFindHashTag = /\B\#\w\w+\b/g;
+  var hashTags = text.match(regFindHashTag);
   hashTags = removeSymbolHashtag(hashTags);
-  let hashTag;
+  var hashTag;
   renderCategories(hashTags);
   if (hashTags.length === 1) {
     hashTag = hashTags[0];
@@ -128,19 +109,19 @@ function getAllhastTagsFromPost(text) {
 }
 
 function removeSymbolHashtag(hashTags) {
-  for (let i = 0; i < hashTags.length; i++) {
+  for (var i = 0; i < hashTags.length; i++) {
     hashTags[i] = hashTags[i].slice(1);
   }
   return hashTags;
 }
 
 function renderCategories(categoriesList) {
-  let menu = document.getElementById('menu');
+  var menu = document.getElementById('menu');
   if (document.getElementById(categoriesList[0]) == null) {
-    let category = document.createElement("li");
+    var category = document.createElement("li");
     category.id = categoriesList[0];
 
-    let category_link = document.createElement("a");
+    var category_link = document.createElement("a");
     category_link.className = "mdl-navigation__link";
     category_link.id = categoriesList[0] + '_link';
     category_link.href = '#' + categoriesList[0];
@@ -153,17 +134,17 @@ function renderCategories(categoriesList) {
     menu.appendChild(category);
   }
   if (categoriesList.length > 1) {
-    let parentCategory = document.getElementById(categoriesList[0]);
+    var parentCategory = document.getElementById(categoriesList[0]);
     if (document.getElementById('sub_' + categoriesList[0]) == null) {
-      let subNav = document.createElement('nav');
+      var subNav = document.createElement('nav');
       subNav.id = 'sub_' + categoriesList[0];
       subNav.className = 'mdl-navigation';
       parentCategory.appendChild(subNav);
     }
-    let subNav = document.getElementById('sub_' + categoriesList[0]);
-    for (let i = 1; i < categoriesList.length; i++) {
+    var subNav = document.getElementById('sub_' + categoriesList[0]);
+    for (var i = 1; i < categoriesList.length; i++) {
       if (document.getElementById(categoriesList[i] + "_link") == null) {
-        let category = document.createElement("a");
+        var category = document.createElement("a");
         category.className = "mdl-navigation__link";
         category.id = categoriesList[i] + "_link";
         category.href = '#' + categoriesList[i];
@@ -202,11 +183,11 @@ function getData(data) {
     throw new Error(
         "Cannot read data from vk group. Please contact with Nikolay Kozak");
   }
-  let hashTag, postTitle, postText, postType, postImage;
-  let posts = data.response.items;
-  for (let i in posts) {
-    let isPublic = false;
-    let post = posts[i];
+  var hashTag, postTitle, postText, postType, postImage;
+  var posts = data.response.items;
+  for (var i in posts) {
+    var isPublic = false;
+    var post = posts[i];
     postType = post.attachments[0].type;
     postText = post.text;
     if(postText.match(regFindPublic) != null){
@@ -227,11 +208,11 @@ function getData(data) {
 }
 
 function drawPosts(postImage, postTitle, postText, postCategory, isPublic) {
-  let card = document.createElement("div");
+  var card = document.createElement("div");
   card.className = postCategory + " "
-      + "mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--4dp";
+      + "mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--9-col-tabvar mdl-cell--4-col-phone mdl-card mdl-shadow--4dp";
   card.innerHTML =
-      ' <div class="mdl-cell  mdl-cell--4-col-desktop mdl-cell--hide-tablet mdl-cell--4-col-phone">\n'
+      ' <div class="mdl-cell  mdl-cell--4-col-desktop mdl-cell--hide-tabvar mdl-cell--4-col-phone">\n'
       +
       '   <img class="card_image" src="' + postImage + '" alt="">\n' +
       ' </div>\n' +
@@ -254,10 +235,10 @@ function drawPosts(postImage, postTitle, postText, postCategory, isPublic) {
       +
       '           </div>\n' +
       ' </div>\n';
-  let content = document.getElementById("content");
+  var content = document.getElementById("content");
   content.appendChild(card);
 
-  let readMore = document.getElementById(
+  var readMore = document.getElementById(
       postCategory.replace(/\s/g, "_") + '_read-more');
   readMore.addEventListener('click', function () {
     if (!isGetAccessToArticle(postImage, postTitle, postText, isPublic)) {
@@ -268,15 +249,15 @@ function drawPosts(postImage, postTitle, postText, postCategory, isPublic) {
 }
 
 function getPayPage(user, postImage, postTitle, postText) {
-  let dialog = document.querySelector('#payModal');
+  var dialog = document.querySelector('#payModal');
   dialog.showModal();
   document.querySelector('#payForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    let pay = {
+    var pay = {
       cardNumber: formData.get("cardNumber")
     };
-    let userRequest = {
+    var userRequest = {
       user: user,
       pay: pay
     };
@@ -294,12 +275,12 @@ function getPayPage(user, postImage, postTitle, postText) {
 }
 
 function getSignUpPage(postImage, postTitle, postText) {
-  let dialog = document.querySelector('#signUpModal');
+  var dialog = document.querySelector('#signUpModal');
   dialog.showModal();
   document.querySelector('#signUpForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    let user = {
+    var user = {
       userName: document.getElementById("userNameInput_signUpModal").value,
       password: document.getElementById("passwordInput_signUpModal").value
     };
@@ -314,18 +295,19 @@ function getSignUpPage(postImage, postTitle, postText) {
 }
 
 function getLoginPage(postImage, postTitle, postText) {
-  let dialog = document.querySelector('#signInModal');
+  var dialog = document.querySelector('#signInModal');
   dialog.showModal();
   document.querySelector('#loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    let user = {
+    var user = {
       userName: document.getElementById("userNameInput_signInModal").value,
       password: document.getElementById("passwordInput_signInModal").value
     };
     if (checkAccess(user)) {
       if(isOpenNewArticle(postImage, postTitle, postText)){
          dialog.close();
+         return;
       } else {
         dialog.close();
         throw new Error("Can't open new article");
@@ -343,7 +325,7 @@ function getLoginPage(postImage, postTitle, postText) {
 }
 
 function isOpenNewArticle(postImage, postTitle, postText) {
-  let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
+  var OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
   OpenWindow.onload = function () {
     OpenWindow.init(postImage, postTitle, postText);
     return false;
@@ -357,3 +339,19 @@ function isGetAccessToArticle(postImage, postTitle, postText, isPublic) {
   else if (saveUserRequest != null && checkAccess(saveUserRequest.user)) { return isOpenNewArticle(postImage, postTitle, postText); } 
   else { return false; }
 }
+
+$("#fixed-header-drawer-exp").on("keyup", function () {
+  var value = $(this).val();
+  count = 0;
+  $(".mdl-card").each(function (index) {
+    $row = $(this);
+    var title = $row.find("#title").text();
+
+    if ($(this).text().search(new RegExp(value, "i")) < 0) {
+      $row.hide();
+    } else {
+      $row.show();
+      count++;
+    }
+  });
+});
