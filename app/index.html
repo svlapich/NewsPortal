@@ -28,17 +28,17 @@
   <form class="mdl-dialog__content" id="signUpForm">
     <div class="mdl-textfield mdl-js-textfield">
       <label class="mdl-textfield__label" for="userNameInput_signUpModal">Login</label>
-      <input class="mdl-textfield__input" id="userNameInput_signUpModal" name="userName"
+      <input class="mdl-textfield__input" id="userNameInput_signUpModal" required="true" name="userName"
              type="text">
     </div>
     <div class="mdl-textfield mdl-js-textfield">
       <label class="mdl-textfield__label" for="passwordInput_signUpModal">Password</label>
-      <input class="mdl-textfield__input" id="passwordInput_signUpModal" name="password"
+      <input class="mdl-textfield__input" id="passwordInput_signUpModal" required="true" name="password"
              type="text">
     </div>
     <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
       <button class="show-pay mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-              onclick="getPayPage();" style="text-align: center;" type="button">
+              style="text-align: center;" type="submit">
         Pay
       </button>
       <button ;
@@ -64,12 +64,12 @@
   <form class="mdl-dialog__content" id="loginForm">
     <div class="mdl-textfield mdl-js-textfield">
       <label class="mdl-textfield__label" for="userNameInput_signInModal">Login</label>
-      <input class="mdl-textfield__input" id="userNameInput_signInModal" name="userName"
+      <input class="mdl-textfield__input" id="userNameInput_signInModal" required="true" name="userName"
              type="text">
     </div>
     <div class="mdl-textfield mdl-js-textfield">
       <label class="mdl-textfield__label" for="passwordInput_signInModal">Password</label>
-      <input class="mdl-textfield__input" id="passwordInput_signInModal" name="password"
+      <input class="mdl-textfield__input" id="passwordInput_signInModal" required="true" name="password"
              type="text">
     </div>
     <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
@@ -99,7 +99,7 @@
   <form class="mdl-dialog__content" id="payForm">
     <div class="mdl-textfield mdl-js-textfield">
       <label class="mdl-textfield__label" for="cardNumberInput_signUpModal">Card number</label>
-      <input class="mdl-textfield__input" id="cardNumberInput_signUpModal" name="cardNumber"
+      <input class="mdl-textfield__input" id="cardNumberInput_signUpModal" required="true" name="cardNumber"
              type="text">
     </div>
     <div class="mdl-dialog__actions mdl-dialog__actions--full-width">

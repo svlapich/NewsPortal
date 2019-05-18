@@ -1,5 +1,6 @@
 const token = 'a8604e5da8604e5da8604e5d3ca809ad4faa860a8604e5df4ce2dfea4a7526bfd377d24';
 const findFirstSent = /[^\.\!\?]+[\.\!\?]/;
+let regFindPublic = /\B\@\w\w+\b/g;
 let isLoaded = false;
 
 let saveUserRequest;
@@ -128,9 +129,13 @@ function getData(data) {
   let hashTag, postTitle, postText, postType, postImage;
   let posts = data.response.items;
   for (let i in posts) {
+    let isPublic = false;
     let post = posts[i];
     postType = post.attachments[0].type;
     postText = post.text;
+    if(postText.match(regFindPublic) != null){
+      isPublic = true;
+    }
     hashTag = getAllhastTagsFromPost(postText);
     postTitle = postText.match(findFirstSent)[0];
 
@@ -141,11 +146,11 @@ function getData(data) {
     } else if (postType === 'link') {
       postImage = post.attachments[0]['link']['photo']['photo_604'];
     }
-    drawPosts(postImage, postTitle, postText, hashTag);
+    drawPosts(postImage, postTitle, postText, hashTag, isPublic);
   }
 }
 
-function drawPosts(postImage, postTitle, postText, postCategory) {
+function drawPosts(postImage, postTitle, postText, postCategory, isPublic) {
   let card = document.createElement("div");
   card.className = postCategory + " "
       + "mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--4dp";
@@ -179,23 +184,19 @@ function drawPosts(postImage, postTitle, postText, postCategory) {
   let readMore = document.getElementById(
       postCategory.replace(/\s/g, "_") + '_read-more');
   readMore.addEventListener('click', function () {
-    if (getArticle(postImage, postTitle, postText)) {
-      getLoginPage(postImage, postTitle, postText);
+    if (getArticle(postImage, postTitle, postText, isPublic)) {
+      getLoginPage(postImage, postTitle, postText, isPublic);
     }
   }, false);
 
 }
 
-function getPayPage() {
+function getPayPage(user) {
   closeModal("signUpModal");
   let dialog = document.querySelector('#payModal');
   dialog.showModal();
   document.querySelector('#payForm').addEventListener('submit', (e) => {
     const formData = new FormData(e.target);
-    let user = {
-      userName: document.getElementById("userNameInput_signUpModal").value,
-      password: document.getElementById("userNameInput_signUpModal").value
-    };
     let pay = {
       cardNumber: formData.get("cardNumber")
     };
@@ -213,9 +214,19 @@ function getSignUpPage() {
   closeModal("signInModal");
   let dialog = document.querySelector('#signUpModal');
   dialog.showModal();
+  document.querySelector('#signUpForm').addEventListener('submit', (e) => {
+    const formData = new FormData(e.target);
+    let user = {
+      userName: document.getElementById("userNameInput_signInModal").value,
+      password: document.getElementById("passwordInput_signInModal").value
+    };
+    dialog.close();
+    e.preventDefault();
+    getPayPage(user);
+  });
 }
 
-function getLoginPage(postImage, postTitle, postText) {
+function getLoginPage(postImage, postTitle, postText, isPublic) {
   closeModal("signUpModal");
   let dialog = document.querySelector('#signInModal');
   dialog.showModal();
@@ -229,7 +240,7 @@ function getLoginPage(postImage, postTitle, postText) {
       password: document.getElementById("passwordInput_signInModal").value
     };
     if (checkAccess(user)) {
-      getArticle(postImage, postTitle, postText);
+      getArticle(postImage, postTitle, postText, isPublic);
       dialog.close();
       e.preventDefault();
     } else {
@@ -292,8 +303,14 @@ function checkAccess(user) {
   return result;
 }
 
-function getArticle(postImage, postTitle, postText) {
-  if (saveUser != null && checkAccess(saveUser)) {
+function getArticle(postImage, postTitle, postText, isPublic) {
+  if(isPublic) {
+    let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
+    OpenWindow.onload = function () {
+      OpenWindow.init(postImage, postTitle, postText);
+    };
+    return false;
+  } else if (saveUser != null && checkAccess(saveUser)) {
     let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
     OpenWindow.onload = function () {
       OpenWindow.init(postImage, postTitle, postText);
