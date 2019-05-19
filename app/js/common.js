@@ -176,6 +176,13 @@ function renderCategories(categoriesList) {
 function getAllPostFromCategories(categoryName) {
   $('#content').children().each(function () {
     if ($(this).hasClass(categoryName)) {
+      $("#menu").find('a').each(function() {
+        if($(this).is("#" +   categoryName + "_link")) {
+          $(this).addClass("active");
+        } else {
+          $(this).removeClass("active");
+        }
+      });
       $(this).removeClass('hidden');
     } else {
       $(this).addClass('hidden');
@@ -361,7 +368,7 @@ function isGetAccessToArticle(postImage, postTitle, postText, isPublic) {
   }
   if (saveUser != null && checkAccess(saveUser)) {
     return isOpenNewArticle(postImage, postTitle, postText);
-  } else if (saveUserRequest != null && checkAccess(saveUserRequest.user)) {
+  } else if (saveUserRequest != null && checkAccess(saveUserRequest.user)) {  
     return isOpenNewArticle(postImage, postTitle, postText);
   } else {
     return false;
