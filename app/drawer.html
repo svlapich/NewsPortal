@@ -1,9 +1,16 @@
 <span class="mdl-layout-title">AFN</span>
 <nav class="mdl-navigation" id="menu">
   <li id="all">
-    <a class="mdl-navigation__link" href="/" id='all_link'>All news</a>
+    <a class="mdl-navigation__link" href="#All" id='all_link'>All news</a>
   </li>
 </nav>
 
 <script src="js/scripts.min.js"></script>
+<script type="text/javascript">
+	document.getElementById("all_link").addEventListener("click", function() {
+	  $('#content').children().each(function () {
+	    $(this).removeClass('hidden');
+	  });
+	});
+</script>
 </script>

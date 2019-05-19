@@ -3,69 +3,79 @@
 @import "base"
 @import "vars"
 
-ul, li 
+ul, li
 	list-style: none
 
 .active
 	font-size: 18px
 	color: red !important
 
-.card_image 
-  width: 100%
-  height: auto
+.card_image
+	width: 100%
+	height: auto
 
 .mdl-dialog
 	width: 500px
+
 	.mdl-textfield
 		width: 100%
-	.mdl-dialog__actions 
+
+	.mdl-dialog__actions
 		padding-top: 30px
+
 		button
 			margin-top: 5px
+
 		div
 			width: 100%
 			text-align: center
+
 			p
 				margin-top: 10px
 				float: left
+
 			button
 				padding-right: 20px
 				float: left
 
 
 .article__content
+	text-align: center
 	margin: 0 auto
 	width: 80%
 
 #back
 	transition: 0.5s ease
+
 	i
 		padding-top: 10px
 		font-size: 40px
 		color: white
+
 #back:hover
 	i
 		color: black
 
- p 
- 	text-indent: 20px
+	p
+		text-indent: 20px
 
 .hidden
-  visibility: hidden
+	visibility: hidden
 
 .article_header h1
 	margin: 20px 10px
 	text-align: center
 	font-size: 45px
 	font-weight: 900
-  line-height: 1.2
+		line-height: 1.2
 
 .article_text
 	margin: 30px 0
-	text-align: left 
+	text-align: left
 
 .article_image
-	width: 100%
+	width: 60%
 	height: auto
 
-@import "media" // Always in the end
+@import "media"
+// Always in the end

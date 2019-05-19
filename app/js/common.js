@@ -1,19 +1,20 @@
-'use strict'
+'use strict';
 
-var findFirstSent = /[^\.\!\?]+[\.\!\?]/;
-var regFindPublic = /\B\@\w\w+\b/g;
-var isLoaded = false;
-var isLoadedSignUp = false;
-var saveUserRequest;
-var saveUser;
-var saveData;
+let token = "7a5de8997a5de8997a5de899917a34fc5777a5d7a5de8992620176c45c38ea6bdcec820";
+let findFirstSent = /[^\.\!\?]+[\.\!\?]/;
+let regFindPublic = /\B\@\w\w+\b/g;
+let isLoaded = false;
+let isLoadedSignUp = false;
+let saveUserRequest;
+let saveUser;
+let saveData;
 
 function getUrl(method, params) {
   if (!method) {
     throw Error('There is incorrect method');
   }
   params = params || {};
-  params['access_token'] = "7a5de8997a5de8997a5de899917a34fc5777a5d7a5de8992620176c45c38ea6bdcec820";
+  params['access_token'] = token;
   return 'https://api.vk.com/method/' + method + '?' + $.param(params)
       + '&v=5.52';
 }
@@ -30,7 +31,7 @@ function onStart(callback) {
     dataType: "JSONP",
     async: false,
     success: function (data) {
-      if(data != null) {
+      if (data != null) {
         callback(data);
       }
     },
@@ -42,7 +43,7 @@ function onStart(callback) {
 }
 
 function closeModal(dialogName) {
-  var dialog = document.querySelector('#' + dialogName);
+  let dialog = document.querySelector('#' + dialogName);
   dialog.close();
 }
 
@@ -51,7 +52,7 @@ function signup(requestUser) {
   if (isLoadedSignUp) {
     return;
   }
-  $.ajax({  
+  $.ajax({
     url: "http://localhost:8080/api/v1/users",
     method: "POST",
     data: JSON.stringify(requestUser),
@@ -60,7 +61,7 @@ function signup(requestUser) {
     success: function (data) {
       if (data != null) {
         console.log(data);
-        if(saveUserRequest != null) {
+        if (saveUserRequest != null) {
 
         } else {
           saveUserRequest = requestUser;
@@ -75,7 +76,7 @@ function signup(requestUser) {
 }
 
 function checkAccess(user) {
-  var result = false;
+  let result = false;
   $.ajax({
     url: "http://localhost:8080/api/v1/news",
     method: "POST",
@@ -84,8 +85,8 @@ function checkAccess(user) {
     async: false,
     success: function (data) {
       if (data.isPremium === true) {
-        if(saveUser != null){
-          
+        if (saveUser != null) {
+
         } else {
           saveUser = user;
         }
@@ -100,10 +101,10 @@ function checkAccess(user) {
 }
 
 function getAllhastTagsFromPost(text) {
-  var regFindHashTag = /\B\#\w\w+\b/g;
-  var hashTags = text.match(regFindHashTag);
+  let regFindHashTag = /\B\#\w\w+\b/g;
+  let hashTags = text.match(regFindHashTag);
   hashTags = removeSymbolHashtag(hashTags);
-  var hashTag;
+  let hashTag;
   renderCategories(hashTags);
   if (hashTags.length === 1) {
     hashTag = hashTags[0];
@@ -114,19 +115,19 @@ function getAllhastTagsFromPost(text) {
 }
 
 function removeSymbolHashtag(hashTags) {
-  for (var i = 0; i < hashTags.length; i++) {
+  for (let i = 0; i < hashTags.length; i++) {
     hashTags[i] = hashTags[i].slice(1);
   }
   return hashTags;
 }
 
 function renderCategories(categoriesList) {
-  var menu = document.getElementById('menu');
+  let menu = document.getElementById('menu');
   if (document.getElementById(categoriesList[0]) == null) {
-    var category = document.createElement("li");
+    let category = document.createElement("li");
     category.id = categoriesList[0];
 
-    var category_link = document.createElement("a");
+    let category_link = document.createElement("a");
     category_link.className = "mdl-navigation__link";
     category_link.id = categoriesList[0] + '_link';
     category_link.href = '#' + categoriesList[0];
@@ -139,17 +140,17 @@ function renderCategories(categoriesList) {
     menu.appendChild(category);
   }
   if (categoriesList.length > 1) {
-    var parentCategory = document.getElementById(categoriesList[0]);
+    let parentCategory = document.getElementById(categoriesList[0]);
     if (document.getElementById('sub_' + categoriesList[0]) == null) {
-      var subNav = document.createElement('nav');
+      let subNav = document.createElement('nav');
       subNav.id = 'sub_' + categoriesList[0];
       subNav.className = 'mdl-navigation';
       parentCategory.appendChild(subNav);
     }
-    var subNav = document.getElementById('sub_' + categoriesList[0]);
-    for (var i = 1; i < categoriesList.length; i++) {
+    let subNav = document.getElementById('sub_' + categoriesList[0]);
+    for (let i = 1; i < categoriesList.length; i++) {
       if (document.getElementById(categoriesList[i] + "_link") == null) {
-        var category = document.createElement("a");
+        let category = document.createElement("a");
         category.className = "mdl-navigation__link";
         category.id = categoriesList[i] + "_link";
         category.href = '#' + categoriesList[i];
@@ -184,18 +185,34 @@ function getAllPostFromCategories(categoryName) {
 
 //function for get response from vk
 function getData(data) {
+  $("#fixed-header-drawer-exp").on("keyup ", function () {
+    let value = $(this).val();
+    console.log(value);
+    count = 0;
+    $(".mdl-card").each(function (index) {
+      $row = $(this);
+      let title = $row.find("#title").text();
+
+      if ($(this).text().search(new RegExp(value, "i")) < 0) {
+        $row.hide();
+      } else {
+        $row.show();
+        count++;
+      }
+    });
+  });
   if (data == null || data.response == null) {
     throw new Error(
         "Cannot read data from vk group. Please contact with Nikolay Kozak");
   }
-  var hashTag, postTitle, postText, postType, postImage;
-  var posts = data.response.items;
-  for (var i in posts) {
-    var isPublic = false;
-    var post = posts[i];
+  let hashTag, postTitle, postText, postType, postImage;
+  let posts = data.response.items;
+  for (let i in posts) {
+    let isPublic = false;
+    let post = posts[i];
     postType = post.attachments[0].type;
     postText = post.text;
-    if(postText.match(regFindPublic) != null){
+    if (postText.match(regFindPublic) != null) {
       isPublic = true;
     }
     hashTag = getAllhastTagsFromPost(postText);
@@ -213,11 +230,11 @@ function getData(data) {
 }
 
 function drawPosts(postImage, postTitle, postText, postCategory, isPublic) {
-  var card = document.createElement("div");
+  let card = document.createElement("div");
   card.className = postCategory + " "
-      + "mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--9-col-tabvar mdl-cell--4-col-phone mdl-card mdl-shadow--4dp";
+      + "mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--9-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--4dp";
   card.innerHTML =
-      ' <div class="mdl-cell  mdl-cell--4-col-desktop mdl-cell--hide-tabvar mdl-cell--4-col-phone">\n'
+      ' <div class="mdl-cell  mdl-cell--4-col-desktop mdl-cell--hide-tablet mdl-cell--4-col-phone">\n'
       +
       '   <img class="card_image" src="' + postImage + '" alt="">\n' +
       ' </div>\n' +
@@ -240,10 +257,10 @@ function drawPosts(postImage, postTitle, postText, postCategory, isPublic) {
       +
       '           </div>\n' +
       ' </div>\n';
-  var content = document.getElementById("content");
+  let content = document.getElementById("content");
   content.appendChild(card);
 
-  var readMore = document.getElementById(
+  let readMore = document.getElementById(
       postCategory.replace(/\s/g, "_") + '_read-more');
   readMore.addEventListener('click', function () {
     if (!isGetAccessToArticle(postImage, postTitle, postText, isPublic)) {
@@ -254,38 +271,38 @@ function drawPosts(postImage, postTitle, postText, postCategory, isPublic) {
 }
 
 function getPayPage(user, postImage, postTitle, postText) {
-  var dialog = document.querySelector('#payModal');
+  let dialog = document.querySelector('#payModal');
   dialog.showModal();
   document.querySelector('#payForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    var pay = {
+    let pay = {
       cardNumber: formData.get("cardNumber")
     };
-    var userRequest = {
+    let userRequest = {
       user: user,
       pay: pay
     };
     dialog.close();
     signup(userRequest);
-    if(checkAccess(user)){
-      if(isOpenNewArticle(postImage, postTitle, postText)){
-         dialog.close();
+    if (checkAccess(user)) {
+      if (isOpenNewArticle(postImage, postTitle, postText)) {
+        dialog.close();
       } else {
         dialog.close();
         throw new Error("Can't open new article");
       }
-    } 
+    }
   });
 }
 
 function getSignUpPage(postImage, postTitle, postText) {
-  var dialog = document.querySelector('#signUpModal');
+  let dialog = document.querySelector('#signUpModal');
   dialog.showModal();
   document.querySelector('#signUpForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    var user = {
+    let user = {
       userName: document.getElementById("userNameInput_signUpModal").value,
       password: document.getElementById("passwordInput_signUpModal").value
     };
@@ -300,19 +317,19 @@ function getSignUpPage(postImage, postTitle, postText) {
 }
 
 function getLoginPage(postImage, postTitle, postText) {
-  var dialog = document.querySelector('#signInModal');
+  let dialog = document.querySelector('#signInModal');
   dialog.showModal();
   document.querySelector('#loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    var user = {
+    let user = {
       userName: document.getElementById("userNameInput_signInModal").value,
       password: document.getElementById("passwordInput_signInModal").value
     };
     if (checkAccess(user)) {
-      if(isOpenNewArticle(postImage, postTitle, postText)){
-         dialog.close();
-         return;
+      if (isOpenNewArticle(postImage, postTitle, postText)) {
+        dialog.close();
+
       } else {
         dialog.close();
         throw new Error("Can't open new article");
@@ -324,13 +341,13 @@ function getLoginPage(postImage, postTitle, postText) {
     }
   });
   document.querySelector('.showSignUp').addEventListener('click', function () {
-    dialog.close(); 
+    dialog.close();
     getSignUpPage(postImage, postTitle, postText);
   });
 }
 
 function isOpenNewArticle(postImage, postTitle, postText) {
-  var OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
+  let OpenWindow = window.open("post.html#" + postText.replace(/\s/g, "_"));
   OpenWindow.onload = function () {
     OpenWindow.init(postImage, postTitle, postText);
     return false;
@@ -339,24 +356,15 @@ function isOpenNewArticle(postImage, postTitle, postText) {
 }
 
 function isGetAccessToArticle(postImage, postTitle, postText, isPublic) {
-  if(isPublic != null && isPublic) { return isOpenNewArticle(postImage, postTitle, postText); } 
-  if (saveUser != null && checkAccess(saveUser)) { return isOpenNewArticle(postImage, postTitle, postText); } 
-  else if (saveUserRequest != null && checkAccess(saveUserRequest.user)) { return isOpenNewArticle(postImage, postTitle, postText); } 
-  else { return false; }
+  if (isPublic != null && isPublic) {
+    return isOpenNewArticle(postImage, postTitle, postText);
+  }
+  if (saveUser != null && checkAccess(saveUser)) {
+    return isOpenNewArticle(postImage, postTitle, postText);
+  } else if (saveUserRequest != null && checkAccess(saveUserRequest.user)) {
+    return isOpenNewArticle(postImage, postTitle, postText);
+  } else {
+    return false;
+  }
 }
 
-$("#fixed-header-drawer-exp").on("keyup", function () {
-  var value = $(this).val();
-  count = 0;
-  $(".mdl-card").each(function (index) {
-    $row = $(this);
-    var title = $row.find("#title").text();
-
-    if ($(this).text().search(new RegExp(value, "i")) < 0) {
-      $row.hide();
-    } else {
-      $row.show();
-      count++;
-    }
-  });
-});
